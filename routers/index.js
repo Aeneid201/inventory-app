@@ -3,7 +3,7 @@ const router = express.Router();
 const homeController = require('../controllers/home')
 
 router.get('/', homeController.getIndex)
-router.get('/search/:term', homeController.findUsername)
-router.get('/deleteUsernames', homeController.deleteAllUsernames)
+router.get('/category/:category', homeController.getCategory)
+router.get('/product/:slug', homeController.getProduct)
 
 module.exports = router;

@@ -1,8 +1,11 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: #00B7FF;
+@import "@fontsource/lato";
+
+body {
+  font-size: 17px;
+  font-family: "Lato", sans-serif;
+  background: #f5ebe0;
 }

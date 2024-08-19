@@ -1,9 +1,10 @@
 <%- include('partials/header.ejs') %>
 
-<section class="home--products">
+
+<section>
   <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold underline mb-5">
-      Featured products
+    <h1 class="text-3xl capitalize font-bold underline mb-5">
+      <%= title; %>
     </h1>
 
     <div class="grid grid-cols-3 gap-4">
@@ -20,18 +21,5 @@
   </div>
 </section>
 
-<section>
-  <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold underline mb-5">
-      All Categories
-    </h1>
-
-    <div class="grid grid-cols-3 gap-4">
-      <% categories.map(category => {  %>
-      <a class="text-xl capitalize" href="/category/<%= category.name %>"><%= category.name %></a>
-      <% }); %>
-    </div>
-  </div>
-</section>
 
 <%- include('partials/footer.ejs') %>

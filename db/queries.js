@@ -1,8 +1,23 @@
 const pool = require('./pool')
 
-async function getAllUsernames() {
-    const {rows} = await pool.query("SELECT * FROM usernames")
+async function getAllProducts() {
+    const {rows} = await pool.query("SELECT * FROM products LIMIT 6")
+    return rows
+}
 
+async function getCategory(cat) {
+    const {rows} = await pool.query("SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name LIKE '"+ cat + "')")
+    return rows;
+}
+
+async function getProduct(slug) {
+    const {rows} = await pool.query("SELECT * FROM products WHERE slug LIKE '"+ slug + "'")
+    return rows;
+}
+
+
+async function getAllCategories() {
+    const {rows} = await pool.query("SELECT * FROM categories")
     return rows
 }
 
@@ -10,20 +25,10 @@ async function insertUsername(username) {
     await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username])
 }
 
-async function deleteAllUsernames() {
-    await pool.query("DELETE FROM usernames")
-}
-
-async function findUsername(term) {
-    const {rows} = await pool.query("SELECT * FROM usernames WHERE username LIKE '%"+ term + "%' ")
-    console.log("SELECT * FROM usernames WHERE username LIKE '%"+ term + "%' ");
-    
-    return rows
-}
 
 module.exports = {
-    getAllUsernames,
-    insertUsername,
-    deleteAllUsernames,
-    findUsername
+    getAllProducts,
+    getAllCategories,
+    getCategory,
+    getProduct
 }

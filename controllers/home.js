@@ -2,36 +2,25 @@ const db = require("../db/queries")
 
 module.exports = {
     getIndex: async (req, res) => {
-        res.render('index', {title: "Express"})
+        const products = await db.getAllProducts()
+        const categories = await db.getAllCategories()
+        res.render('index', {products : products, categories: categories})
     },
 
-    getUsernames: async(req, res) => {
-        const usernames = await db.getAllUsernames()
-        console.log("Usernames: ", usernames);
-        res.send("Usernames: " + usernames.map(user => user.username).join(", "));
+    getCategory: async (req, res) => {
+        const cat = req.params.category
+        const products = await db.getCategory(cat)
+        res.render('category', {products: products, title : cat})
     },
 
-    createUsernameGet: async(req, res) => {
-        // render the form
+    getProduct: async (req, res) => {
+        const slug = req.params.slug
+        const product = await db.getProduct(slug)        
+        res.render('product', {product: product[0]})
     },
 
-    createUsernamePost: async(req, res) => {
-        const {username} = req.body
-        await db.insertUsername(username)
-        res.redirect("/")
+    getProducts: async (req, res) => {
+        const products = await db.getAllProducts()
+        res.render('products', products)
     },
-
-    findUsername: async (req, res) => {
-        const {term} = req.params
-        console.log(req.params);
-        const results = await db.findUsername(term)
-        console.log(results);
-        res.send(results)
-    },
-
-    deleteAllUsernames: async (req, res) => {
-        await db.deleteAllUsernames()
-        res.redirect("/")
-    }
-
 }
