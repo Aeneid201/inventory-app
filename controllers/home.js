@@ -7,12 +7,6 @@ module.exports = {
         res.render('index', {products : products, categories: categories})
     },
 
-    getCategory: async (req, res) => {
-        const cat = req.params.category
-        const products = await db.getCategory(cat)
-        res.render('category', {products: products, title : cat})
-    },
-
     getProduct: async (req, res) => {
         const slug = req.params.slug
         const product = await db.getProduct(slug)        

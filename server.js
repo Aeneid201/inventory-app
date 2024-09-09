@@ -6,6 +6,7 @@ require('dotenv').config({path: './config/.env'})
 
 // routes
 const mainRoutes = require('./routers/index')
+const categoryRoutes = require('./routers/category')
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', mainRoutes)
+app.use('/category', categoryRoutes)
 
 app.listen(process.env.PORT, () => {
   console.log(`Listening on PORT ${process.env.PORT}`);

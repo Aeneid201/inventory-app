@@ -596,12 +596,12 @@ video {
   position: relative;
 }
 
-.top-2 {
-  top: 0.5rem;
-}
-
 .left-2 {
   left: 0.5rem;
+}
+
+.top-2 {
+  top: 0.5rem;
 }
 
 .mx-auto {

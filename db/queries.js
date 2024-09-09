@@ -21,6 +21,10 @@ async function getAllCategories() {
     return rows
 }
 
+async function createCategory(newCat) {
+    await pool.query("INSERT INTO categories (name) VALUES ($1)", [newCat])
+}
+
 async function insertUsername(username) {
     await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username])
 }
@@ -30,5 +34,6 @@ module.exports = {
     getAllProducts,
     getAllCategories,
     getCategory,
-    getProduct
+    getProduct,
+    createCategory
 }
