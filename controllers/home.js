@@ -1,4 +1,5 @@
 const db = require("../db/queries")
+const cloudinary = require("../middleware/cloudinary");
 
 module.exports = {
     getIndex: async (req, res) => {
@@ -16,5 +17,20 @@ module.exports = {
     getProducts: async (req, res) => {
         const products = await db.getAllProducts()
         res.render('products', products)
+    },
+
+    createCategoryPage: async(req, res) => {
+        res.render('createCategory')
+    },
+
+    addCategory: async(req, res) => {
+        try{
+            const result = await cloudinary.uploader.upload(req.file.path)
+            await db.createCategory(req.body.name, req.body.description, result.secure_url)
+            
+            res.redirect('back')
+        }catch(err) {
+            console.error(err)
+        }
     },
 }

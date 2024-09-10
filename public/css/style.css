@@ -9,3 +9,20 @@ body {
   font-family: "Lato", sans-serif;
   background: #f5ebe0;
 }
+
+p {
+  margin-bottom: 15px;
+}
+
+h2 {
+  font-family: "Lato", sam;
+  font-size: 21px;
+  color: brown;
+  margin-bottom: 10px;
+}
+
+ul {
+  padding-left: 40px;
+  list-style: disc;
+  margin-bottom: 10px;
+}

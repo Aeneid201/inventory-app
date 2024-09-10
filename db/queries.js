@@ -5,9 +5,14 @@ async function getAllProducts() {
     return rows
 }
 
-async function getCategory(cat) {
+async function getProductsByCategory(cat) {
     const {rows} = await pool.query("SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name LIKE '"+ cat + "')")
     return rows;
+}
+
+async function getCategory(cat) {
+    const {rows} = await pool.query("SELECT * FROM categories WHERE name LIKE '"+ cat + "' LIMIT 1")
+    return rows[0]
 }
 
 async function getProduct(slug) {
@@ -21,8 +26,8 @@ async function getAllCategories() {
     return rows
 }
 
-async function createCategory(newCat) {
-    await pool.query("INSERT INTO categories (name) VALUES ($1)", [newCat])
+async function createCategory(catName, catDesc, catImage) {
+    await pool.query("INSERT INTO categories (name, description, image) VALUES ($1, $2, $3)", [catName, catDesc, catImage])
 }
 
 async function insertUsername(username) {
@@ -33,7 +38,8 @@ async function insertUsername(username) {
 module.exports = {
     getAllProducts,
     getAllCategories,
-    getCategory,
+    getProductsByCategory,
     getProduct,
-    createCategory
+    getCategory,
+    createCategory,
 }
