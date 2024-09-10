@@ -1,7 +1,12 @@
 const pool = require('./pool')
 
-async function getAllProducts() {
+async function getFeaturedProducts() {
     const {rows} = await pool.query("SELECT * FROM products LIMIT 6")
+    return rows
+}
+
+async function getAllProducts() {
+    const {rows} = await pool.query("SELECT * FROM products")
     return rows
 }
 
@@ -30,12 +35,8 @@ async function createCategory(catName, catDesc, catImage) {
     await pool.query("INSERT INTO categories (name, description, image) VALUES ($1, $2, $3)", [catName, catDesc, catImage])
 }
 
-async function insertUsername(username) {
-    await pool.query("INSERT INTO usernames (username) VALUES ($1)", [username])
-}
-
-
 module.exports = {
+    getFeaturedProducts,
     getAllProducts,
     getAllCategories,
     getProductsByCategory,

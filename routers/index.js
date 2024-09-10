@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const upload = require("../middleware/multer");
-const homeController = require('../controllers/home')
+const mainController = require('../controllers/home')
 
-router.get('/', homeController.getIndex)
-router.get('/product/:slug', homeController.getProduct)
-router.get('/createCategory', homeController.createCategoryPage)
-router.post('/addCategory', upload.single('image') , homeController.addCategory)
+router.get('/', mainController.getIndex)
+router.get('/product/:slug', mainController.getProduct)
+router.get('/createCategory', mainController.createCategoryPage)
+router.get('/products', mainController.getProducts)
+router.get('/category/:category', mainController.getCategory)
+router.post('/addCategory', upload.single('image') , mainController.addCategory)
 
 module.exports = router;
