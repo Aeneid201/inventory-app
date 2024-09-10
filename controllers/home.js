@@ -40,4 +40,26 @@ module.exports = {
             console.error(err)
         }
     },
+
+    updateCategory: async (req, res) => {
+        try{
+            const result = await cloudinary.uploader.upload(req.file.path)
+            await db.updateCategory(req.body.name, req.body.description, result.secure_url)
+            res.redirect('back')
+
+        }catch(err) {
+            console.error(err)
+        }
+    },
+
+    deleteCategory: async (req, res) => {
+        try{
+
+            await db.deleteCategory(req.body.id)
+            res.redirect('back')
+            
+        }catch(err) {
+            console.error(err)
+        }
+    }
 }

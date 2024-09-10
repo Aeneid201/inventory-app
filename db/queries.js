@@ -35,6 +35,14 @@ async function createCategory(catName, catDesc, catImage) {
     await pool.query("INSERT INTO categories (name, description, image) VALUES ($1, $2, $3)", [catName, catDesc, catImage])
 }
 
+async function updateCategory(catName, catDesc, catImage) {
+    await pool.query("UPDATE categories SET name = $1, description = $2, image = $3", [catName, catDesc, catImage])
+}
+
+async function deleteCategory(id) {
+    await pool.query("DELETE FROM categories WHERE id = $1", [id])
+}
+
 module.exports = {
     getFeaturedProducts,
     getAllProducts,
@@ -43,4 +51,6 @@ module.exports = {
     getProduct,
     getCategory,
     createCategory,
+    updateCategory,
+    deleteCategory
 }
