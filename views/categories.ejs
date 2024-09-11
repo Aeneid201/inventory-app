@@ -1,0 +1,22 @@
+<%- include('partials/header.ejs') %>
+
+<section>
+  <div class="container mx-auto py-8">
+    <h1 class="text-3xl font-bold underline mb-5">
+      All Categories
+    </h1>
+
+    <div class="grid grid-cols-3 gap-4">
+      <% categories.map(category => {  %>
+      <div class="relative">
+        <a class="text-xl capitalize text-center" href="/category/<%= category.name %>">
+          <img src="<%= category.image ?? 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726083863/placeholder_mesy1e.png' %>" class="object-cover w-full	h-96" alt="<%= category.name %>">
+          <span class="block mt-3"><%= category.name %></span>
+        </a>
+      </div>
+      <% }); %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer.ejs') %>

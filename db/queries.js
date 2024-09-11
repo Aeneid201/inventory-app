@@ -26,6 +26,18 @@ async function getProduct(slug) {
 }
 
 
+async function createProduct(name, description, price, categoryId, image) {
+    await pool.query("INSERT INTO products (name, category_id, image, description, slug, price) VALUES ($1, $2, $3, $4, $5, $6)", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price])
+}
+
+async function updateProduct(name, description, price, categoryId, image) {
+    await pool.query("UPDATE products SET name = $1, description = $2, image = $3, category_id = $4, price = $5, slug = $6", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price])
+}
+
+async function deleteProduct(id) {
+    await pool.query("DELETE FROM products WHERE id = $1", [id])
+}
+
 async function getAllCategories() {
     const {rows} = await pool.query("SELECT * FROM categories")
     return rows
@@ -52,5 +64,8 @@ module.exports = {
     getCategory,
     createCategory,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    createProduct,
+    updateProduct,
+    deleteProduct
 }
