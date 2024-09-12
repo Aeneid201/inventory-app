@@ -31,16 +31,37 @@ module.exports = {
         res.render('categories', {categories: categories})
     },
 
+    // pages
+
     createCategoryPage: async(req, res) => {
         res.render('createCategory')
     },
 
+    editCategoryPage: async(req, res) => {
+        const cat = req.params.category
+        const category = await db.getCategory(cat)
+        res.render('editCategory', {category: category})
+    },
+
+    createProductPage: async(req, res) => {
+        const allCategories = await db.getAllCategories()
+        res.render('createProduct', {categories: allCategories})
+    },
+
+
+    // END pages
+    
     addCategory: async(req, res) => {
         try{
-            const result = await cloudinary.uploader.upload(req.file.path)
-            await db.createCategory(req.body.name, req.body.description, result.secure_url)
+
+            if(req?.file?.path) {
+                const result = await cloudinary.uploader.upload(req.file.path)
+                await db.createCategory(req.body.name, req.body.description, result.secure_url, result.public_id)
+            }else {
+                await db.createCategory(req.body.name, req.body.description, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726083863/placeholder_mesy1e.png', 'placeholder_mesy1e')
+            }
             
-            res.redirect('back')
+            res.redirect('/categories')
         }catch(err) {
             console.error(err)
         }
@@ -48,9 +69,23 @@ module.exports = {
 
     updateCategory: async (req, res) => {
         try{
-            const result = await cloudinary.uploader.upload(req.file.path)
-            await db.updateCategory(req.body.name, req.body.description, result.secure_url)
-            res.redirect('back')
+            const cat = req.body.category
+            const category = await db.getCategory(cat)
+
+            if(!category) return 'Invalid category.'
+
+            if(req?.file?.path) {
+                cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+                const result = await cloudinary.uploader.upload(req.file.path)
+
+                await db.updateCategory(category.id, req.body.name, req.body.description, result.secure_url, result.public_id)
+            }else {
+                await db.updateCategory(category.id, req.body.name, req.body.description, category.image, category.cloudinary_id)
+            }
+
+            console.log('Category updated successfully.');
+            
+            res.redirect(`/editCategory/${req.body.name}`)
 
         }catch(err) {
             console.error(err)
@@ -60,23 +95,25 @@ module.exports = {
     deleteCategory: async (req, res) => {
         try{
 
-            await db.deleteCategory(req.body.id)
-            res.redirect('back')
+            const cat = req.body.category
+            const category = await db.getCategory(cat)
+
+            if(!category) return 'Invalid category!'
+            cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+            await db.deleteCategory(category.id)
+            console.log('Category deleted')
+
+            res.redirect('/categories')
             
         }catch(err) {
             console.error(err)
         }
     },
 
-    createProductPage: async(req, res) => {
-        const allCategories = await db.getAllCategories()
-        res.render('createProduct', {categories: allCategories})
-    },
-
     addProduct: async(req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
-            await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url)
+            await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
             
             console.log('Product added successfully!');
             
@@ -89,7 +126,8 @@ module.exports = {
     updateProduct: async (req, res) => {
         try{
             const result = await cloudinary.uploader.upload(req.file.path)
-            await db.updateProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url)
+            //TODO: delete old image from cloudinary if it was changed
+            await db.updateProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
 
             console.log('Product updated successfully!');
             res.redirect('back')
@@ -103,6 +141,9 @@ module.exports = {
         try{
 
             await db.deleteProduct(req.body.id)
+            //TODO: delete image from cloudinary
+            //cloudinary.uploader.destroy('cloudinary_id', function(result) { console.log(result) });
+
             console.log('Product deleted successfully!');
             res.redirect('back')
             
