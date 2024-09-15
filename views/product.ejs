@@ -3,14 +3,29 @@
 
 <section>
   <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold underline mb-5">
+    <h1>
       <%= product.name; %>
     </h1>
 
-    <div>
-      <img src="<%= product.image %>" class="block mb-3 h-[600px] w-full object-cover" alt="<%= product.name %>">
-      <p>$<%= product.price; %></p>
-      <p><%= product.description; %></p>
+    <div class="flex w-full mb-4">
+
+      <a href="/editProduct/<%= product.slug; %>" class="button">Edit Product</a>
+
+      <form action="/deleteProduct?_method=DELETE" method="POST">
+        <input type="hidden" name="product" value="<%= product.slug; %>">
+        <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete Product</button>
+      </form>
+    </div>
+
+    <div class="flex justify-center w-full">
+      <div class="w-2/5">
+        <img src="<%= product.image %>" class="rounded-md w-full mb-3 object-cover" alt="<%= product.name %>">
+      </div>
+
+      <div class="w-3/5 pl-8">
+        <p class="text-white text-2xl font-bold">$<%= product.price; %></p>
+        <p><%= product.description; %></p>
+      </div>
     </div>
   </div>
 </section>

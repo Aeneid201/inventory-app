@@ -3,44 +3,54 @@
 
 <section>
   <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold underline mb-5">
-      Create Product
+    <h1>
+      Add a new product
     </h1>
 
     <div class="max-w-96">
       <form action="/addProduct" method="POST" enctype="multipart/form-data">
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="name"></label>
-        Name*
-        </label>
-        <input required name="name" type="text" placeholder="Name of the product" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+        <div class="mb-5">
+          <label for="name">
+            Name*
+          </label>
+          <input required name="name" type="text" placeholder="Name of the product">
+        </div>
 
+        <div class="mb-5">
+          <label for="category">
+            Category*
+          </label>
 
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="category"></label>
-        Category*
-        </label>
+          <select name="category" id="">
+            <% categories.map(category => { %>
+            <option value="<%= category.id %>"><%= category.name %></option>
+            <% }) %>
+          </select>
+        </div>
 
-        <select name="category" id="" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
-          <% categories.map(category => { %>
-          <option value="<%= category.id %>"><%= category.name %></option>
-          <% }) %>
-        </select>
+        <div class="mb-5">
+          <label for="price">
+            Price*
+          </label>
 
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="price"></label>
-        Price*
-        </label>
+          <input required name="price" type="text" placeholder="$500">
+        </div>
 
-        <input required name="price" type="text" placeholder="$500" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
+        <div class="mb-5">
+          <label for="description">
+            Description*
+          </label>
+          <textarea required rows="5" name="description" id="description"></textarea>
+        </div>
 
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="description"></label>
-        Description*
-        </label>
-        <textarea required rows="5" name="description" id="description" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"></textarea>
+        <div class="mb-5">
+          <label for="image">
+            Image
+          </label>
+          <input type="file" name="image" />
+        </div>
 
-        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="image"></label>
-        Product image*
-        </label>
-        <input type="file" name="image" class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" />
-        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Submit</button>
+        <button type="submit">Add product</button>
       </form>
     </div>
 

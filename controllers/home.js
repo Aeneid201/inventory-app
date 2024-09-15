@@ -48,6 +48,11 @@ module.exports = {
         res.render('createProduct', {categories: allCategories})
     },
 
+    editProductPage: async(req, res) => {
+        const productParam = req.params.product
+        const product = await db.getProductBySlug(product)
+        res.render('editProduct', {product: product})
+    },
 
     // END pages
     

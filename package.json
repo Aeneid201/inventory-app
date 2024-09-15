@@ -10,7 +10,6 @@
   "author": "Oumaima Lairani",
   "license": "ISC",
   "dependencies": {
-    "@fontsource/lato": "^5.0.22",
     "cloudinary": "^2.4.0",
     "dotenv": "^16.3.2",
     "ejs": "^3.1.9",

@@ -3,12 +3,12 @@
 
 <section>
   <div class="container mx-auto py-8">
-    <h1 class="text-3xl capitalize font-bold underline mb-5">
+    <h1>
       <%= category.name; %>
     </h1>
-    <div class="">
 
-      <a href="/editCategory/<%= category.name; %>" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit Category</a>
+    <div class="flex w-full mb-4">
+      <a href="/editCategory/<%= category.name; %>" class="button">Edit Category</a>
 
       <form action="/deleteCategory?_method=DELETE" method="POST">
         <input type="hidden" name="category" value="<%= category.name; %>">
