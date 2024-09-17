@@ -1,17 +1,17 @@
 <%- include('partials/header.ejs') %>
 
-<section>
+<section class="min-h-screen">
   <div class="container mx-auto py-8">
-    <h1 class="text-3xl font-bold underline mb-5">
+    <h1>
       All Categories
     </h1>
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-4 gap-4">
       <% categories.map(category => {  %>
-      <div class="relative">
-        <a class="text-xl capitalize text-center" href="/category/<%= category.name %>">
-          <img src="<%= category.image ?? 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726083863/placeholder_mesy1e.png' %>" class="object-cover w-full	h-96" alt="<%= category.name %>">
-          <span class="block mt-3"><%= category.name %></span>
+      <div class="border-gray-200 text-center py-5 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+        <a href="/category/<%= category.name %>">
+          <img src="<%= category.image; %>" alt="<%= category.name; %>" class="w-24 mx-auto h-24 mb-3 rounded-full shadow-lg">
+          <p class="text-xl font-medium text-gray-900 dark:text-white"><%= category.name; %></p>
         </a>
       </div>
       <% }); %>

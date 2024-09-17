@@ -11,8 +11,10 @@ router.get('/categories', mainController.getCategories)
 router.get('/category/:category', mainController.getCategory)
 
 router.get('/createCategory', mainController.createCategoryPage)
-router.get('/editCategory/:category', mainController.editCategoryPage)
 router.get('/createProduct', mainController.createProductPage)
+router.get('/editCategory/:category', mainController.editCategoryPage)
+router.get('/editProduct/:product', mainController.editProductPage)
+
 
 router.post('/addCategory', upload.single('image') , mainController.addCategory)
 router.post('/addProduct', upload.single('image'), mainController.addProduct)

@@ -22,16 +22,16 @@ async function getCategory(cat) {
 
 async function getProduct(slug) {
     const {rows} = await pool.query("SELECT * FROM products WHERE slug LIKE $1", [slug])
-    return rows;
+    return rows[0];
 }
 
 
 async function createProduct(name, description, price, categoryId, image, cloudinary_id) {
-    await pool.query("INSERT INTO products (name, category_id, image, description, slug, price, cloudinary_id) VALUES ($1, $2, $3, $4, $5, $6, $7)", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price, cloudinary_id])
+    await pool.query("INSERT INTO products (name, category_id, image, description, slug, price, cloudinary_id) VALUES ($1, $2, $3, $4, $5, $6, $7)", [name, categoryId, image, description, slug, price, cloudinary_id])
 }
 
-async function updateProduct(name, description, price, categoryId, image, cloudinary_id) {
-    await pool.query("UPDATE products SET name = $1, description = $2, image = $3, category_id = $4, price = $5, slug = $6, cloudinary_id = $7", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price, cloudinary_id])
+async function updateProduct(id, name, description, price, slug, categoryId, image, cloudinary_id) {
+    await pool.query("UPDATE products SET name = $1, description = $2, image = $3, category_id = $4, price = $5, slug = $6, cloudinary_id = $7 WHERE id = $8", [name, description, image, categoryId, price, slug, cloudinary_id, id])
 }
 
 async function deleteProduct(id) {

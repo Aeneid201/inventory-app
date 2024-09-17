@@ -18,7 +18,7 @@ module.exports = {
     getProduct: async (req, res) => {
         const slug = req.params.slug
         const product = await db.getProduct(slug)        
-        res.render('product', {product: product[0]})
+        res.render('product', {product: product})
     },
 
     getProducts: async (req, res) => {
@@ -49,9 +49,10 @@ module.exports = {
     },
 
     editProductPage: async(req, res) => {
+        const allCategories = await db.getAllCategories()
         const productParam = req.params.product
-        const product = await db.getProductBySlug(product)
-        res.render('editProduct', {product: product})
+        const product = await db.getProduct(productParam)
+        res.render('editProduct', {product: product, categories: allCategories})
     },
 
     // END pages
@@ -63,7 +64,7 @@ module.exports = {
                 const result = await cloudinary.uploader.upload(req.file.path)
                 await db.createCategory(req.body.name, req.body.description, result.secure_url, result.public_id)
             }else {
-                await db.createCategory(req.body.name, req.body.description, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726083863/placeholder_mesy1e.png', 'placeholder_mesy1e')
+                await db.createCategory(req.body.name, req.body.description, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726535753/placeholder_hz8mbp.png', 'placeholder_hz8mbp')
             }
             
             res.redirect('/categories')
@@ -117,12 +118,18 @@ module.exports = {
 
     addProduct: async(req, res) => {
         try{
-            const result = await cloudinary.uploader.upload(req.file.path)
-            await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
+
+            if(req?.file?.path) {
+                const result = await cloudinary.uploader.upload(req.file.path)
+                await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
+
+            }else {
+                await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726535753/placeholder_hz8mbp.png', 'placeholder_hz8mbp')
+            }
             
             console.log('Product added successfully!');
-            
             res.redirect('back')
+
         }catch(err) {
             console.error(err)
         }
@@ -130,12 +137,24 @@ module.exports = {
 
     updateProduct: async (req, res) => {
         try{
-            const result = await cloudinary.uploader.upload(req.file.path)
-            //TODO: delete old image from cloudinary if it was changed
-            await db.updateProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
+
+            const productParam = req.body.product
+            const product = await db.getProduct(productParam)
+
+            if(!product) return 'Invalid product'
+            if(req?.file?.path) {
+                cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+                const result = await cloudinary.uploader.upload(req.file.path)
+
+                await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, req.body.slug, req.body.category, result.secure_url, result.public_id)
+
+            }else{
+                await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, req.body.slug, req.body.category, product.image, product.cloudinary_id)
+
+            }
 
             console.log('Product updated successfully!');
-            res.redirect('back')
+            res.redirect(`/editProduct/${req.body.slug}`)
 
         }catch(err) {
             console.error(err)
@@ -144,13 +163,15 @@ module.exports = {
 
     deleteProduct: async (req, res) => {
         try{
+            const productParam = req.body.product
+            const product = await db.getProduct(productParam)
 
-            await db.deleteProduct(req.body.id)
-            //TODO: delete image from cloudinary
-            //cloudinary.uploader.destroy('cloudinary_id', function(result) { console.log(result) });
+            if(!product) return 'Invalid product!'
+            cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+            await db.deleteProduct(product.id)
 
             console.log('Product deleted successfully!');
-            res.redirect('back')
+            res.redirect('/products')
             
         }catch(err) {
             console.error(err)

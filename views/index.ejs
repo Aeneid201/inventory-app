@@ -41,9 +41,14 @@
       All Categories
       </h1>
 
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid lg:grid-cols-4 sm:grid-cols-1 gap-4">
         <% categories.map(category => {  %>
-        <a class="text-xl capitalize" href="/category/<%= category.name %>"><%= category.name %></a>
+        <div class="border-gray-200 text-center py-5 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+          <a href="/category/<%= category.name %>">
+            <img src="<%= category.image; %>" alt="<%= category.name; %>" class="w-24 mx-auto h-24 mb-3 rounded-full shadow-lg">
+            <p class="text-xl font-medium text-gray-900 dark:text-white"><%= category.name; %></p>
+          </a>
+        </div>
         <% }); %>
       </div>
   </div>
