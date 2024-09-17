@@ -27,7 +27,7 @@ async function getProduct(slug) {
 
 
 async function createProduct(name, description, price, categoryId, image, cloudinary_id) {
-    await pool.query("INSERT INTO products (name, category_id, image, description, slug, price, cloudinary_id) VALUES ($1, $2, $3, $4, $5, $6, $7)", [name, categoryId, image, description, slug, price, cloudinary_id])
+    await pool.query("INSERT INTO products (name, category_id, image, description, slug, price, cloudinary_id) VALUES ($1, $2, $3, $4, $5, $6, $7)", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price, cloudinary_id])
 }
 
 async function updateProduct(id, name, description, price, slug, categoryId, image, cloudinary_id) {
