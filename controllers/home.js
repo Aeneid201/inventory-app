@@ -60,6 +60,8 @@ module.exports = {
     addCategory: async(req, res) => {
         try{
 
+            //TODO: check if category already exists
+
             if(req?.file?.path) {
                 const result = await cloudinary.uploader.upload(req.file.path)
                 await db.createCategory(req.body.name, req.body.description, result.secure_url, result.public_id)
@@ -118,6 +120,8 @@ module.exports = {
 
     addProduct: async(req, res) => {
         try{
+
+            //TODO: check if product already exists
 
             if(req?.file?.path) {
                 const result = await cloudinary.uploader.upload(req.file.path)

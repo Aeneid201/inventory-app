@@ -11,7 +11,7 @@
 
       <a href="/editProduct/<%= product.slug; %>" class="button">Edit Product</a>
 
-      <form action="/deleteProduct?_method=DELETE" method="POST">
+      <form>
         <input type="hidden" name="product" value="<%= product.slug; %>">
         <button type="submit" class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete Product</button>
       </form>
@@ -29,6 +29,41 @@
     </div>
   </div>
 </section>
+
+<script>
+  const form = document.querySelector('form')
+
+  async function sendData(form, path = "/") {
+    const formData = new FormData(form);
+    const data = JSON.stringify(Object.fromEntries(formData));
+
+    try {
+      const req = await fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: data
+      })
+
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const pass = prompt('Please enter your admin access code to delete this product')
+
+    if (pass !== '123456') {
+      alert('Wrong password! Please try again.')
+      return;
+    } else {
+      sendData(form, '/deleteProduct?_method=DELETE')
+      alert('Product deleted successfully!')
+    }
+  })
+</script>
 
 
 <%- include('partials/footer.ejs') %>

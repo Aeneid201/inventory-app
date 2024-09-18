@@ -5,6 +5,46 @@
   </div>
 </footer>
 
+<script>
+  const errorMsg = document.querySelector('.error-msg')
+  const successMsg = document.querySelector('.success-msg')
+
+  async function sendData(form, path = "/") {
+    const formData = new FormData(form);
+    const data = JSON.stringify(Object.fromEntries(formData));
+
+    try {
+      const req = await fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: data
+      })
+
+      const res = await req.json()
+
+      res?.errors?.map(error => {
+        errorMsg.classList.remove('hidden')
+        errorMsg.innerHTML += error.message + "<br>"
+      })
+
+      if (res.status === 'success') {
+        errorMsg.classList.add('hidden')
+        successMsg.classList.remove('hidden')
+      }
+
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  function resetForm() {
+    errorMsg.classList.add('hidden')
+    successMsg.classList.add('hidden')
+    errorMsg.innerHTML = ""
+  }
+</script>
 </body>
 
 </html>
