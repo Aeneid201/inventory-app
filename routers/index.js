@@ -20,6 +20,7 @@ router.get('/editProduct/:product', mainController.editProductPage)
 
 router.post('/addCategory', upload.single('image'), validateData(categorySchema) , mainController.addCategory)
 router.post('/addProduct', upload.single('image'), validateData(productSchema), mainController.addProduct)
+router.post('/checkPassword', mainController.checkPassword)
 
 router.put('/updateCategory', upload.single('image'),validateData(categorySchema), mainController.updateCategory)
 router.put('/updateProduct', upload.single('image'),validateData(productEditSchema), mainController.updateProduct)

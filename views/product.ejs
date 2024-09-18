@@ -33,6 +33,42 @@
 <script>
   const form = document.querySelector('form')
 
+  async function checkPassword(password) {
+    try {
+      const req = await fetch('/checkPassword', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: password
+        })
+      })
+
+      const res = await req.json()
+
+      if (res.status === 'error') {
+        alert('Wrong password! Please try again.')
+        return;
+
+      } else if (res.status === 'success') {
+
+        sendData(form, '/deleteProduct?_method=DELETE')
+        alert('Your product has been deleted successfully!')
+        window.location.href = "/products"
+      }
+
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const pass = prompt('Please enter the password to delete this product')
+    checkPassword(pass);
+  })
+
   async function sendData(form, path = "/") {
     const formData = new FormData(form);
     const data = JSON.stringify(Object.fromEntries(formData));
@@ -50,19 +86,6 @@
       console.error(err)
     }
   }
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    const pass = prompt('Please enter your admin access code to delete this product')
-
-    if (pass !== '123456') {
-      alert('Wrong password! Please try again.')
-      return;
-    } else {
-      sendData(form, '/deleteProduct?_method=DELETE')
-      alert('Product deleted successfully!')
-    }
-  })
 </script>
 
 

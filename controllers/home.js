@@ -181,4 +181,14 @@ module.exports = {
             console.error(err)
         }
     },
+
+    checkPassword: async (req, res) => {
+        try {
+            if(req.body.password === process.env.ADMIN_DELETE_ACCESS_CODE) return res.json({status: 'success'})
+            else return res.json({status: 'error'})
+
+        }catch(err){
+            console.error(err)
+        }
+    }
 }

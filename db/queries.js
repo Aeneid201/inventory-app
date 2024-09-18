@@ -1,7 +1,7 @@
 const pool = require('./pool')
 
 async function getFeaturedProducts() {
-    const {rows} = await pool.query("SELECT * FROM products LIMIT 6")
+    const {rows} = await pool.query("SELECT * FROM products LIMIT 8")
     return rows
 }
 
