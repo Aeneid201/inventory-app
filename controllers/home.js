@@ -60,7 +60,11 @@ module.exports = {
     addCategory: async(req, res) => {
         try{
 
-            //TODO: check if category already exists
+            const cat = await db.getCategory(req.body.name)
+            if(cat) {
+                console.log('this category already exists')
+                return res.json({status: 'duplication', message: 'Category already exists.'})
+            }
 
             if(req?.file?.path) {
                 const result = await cloudinary.uploader.upload(req.file.path)
@@ -69,7 +73,7 @@ module.exports = {
                 await db.createCategory(req.body.name, req.body.description, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726535753/placeholder_hz8mbp.png', 'placeholder_hz8mbp')
             }
             
-            res.redirect('/categories')
+            res.json({status: 'success'})
         }catch(err) {
             console.error(err)
         }
@@ -106,12 +110,15 @@ module.exports = {
             const cat = req.body.category
             const category = await db.getCategory(cat)
 
-            if(!category) return 'Invalid category!'
+            if(!category) return 'Invalid category!';
+            if(cat === 'uncategorized') {
+                console.log('You can\'t delete this category')
+                return 'You can\'t delete this category';
+            }
+
             cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
             await db.deleteCategory(category.id)
             console.log('Category deleted')
-
-            res.redirect('/categories')
             
         }catch(err) {
             console.error(err)
@@ -121,7 +128,11 @@ module.exports = {
     addProduct: async(req, res) => {
         try{
 
-            //TODO: check if product already exists
+            const product = await db.getProductByName(req.body.name)
+            if(product) {
+                console.log('This product already exists')
+                return res.json({status: 'duplication', message: 'Product already exists.'})
+            }
 
             if(req?.file?.path) {
                 const result = await cloudinary.uploader.upload(req.file.path)
@@ -132,7 +143,7 @@ module.exports = {
             }
             
             console.log('Product added successfully!');
-            res.redirect('back')
+            res.json({status: 'success'})
 
         }catch(err) {
             console.error(err)
@@ -153,12 +164,15 @@ module.exports = {
                 await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, req.body.slug, req.body.category, result.secure_url, result.public_id)
 
             }else{
-                await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, req.body.slug, req.body.category, product.image, product.cloudinary_id)
+                
+                const slug = req.body.slug ? req.body.slug : (req.body.name).toLowerCase().split(" ").join("-")
+                res.redirect(`/editProduct/${slug}`)
+                await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, slug, req.body.category, product.image, product.cloudinary_id)
 
             }
 
             console.log('Product updated successfully!');
-            res.redirect(`/editProduct/${req.body.slug}`)
+            
 
         }catch(err) {
             console.error(err)

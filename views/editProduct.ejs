@@ -34,7 +34,7 @@
 
           <div class="mb-5">
             <label for="slug">
-              Slug*
+              Slug
             </label>
             <input value="<%= product.slug; %>" name="slug" type="text">
 
@@ -81,7 +81,7 @@
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
-    resetForm()
+    resetFields()
     sendData(form, "/updateProduct?_method=PUT")
     form.reset()
 

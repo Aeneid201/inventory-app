@@ -25,6 +25,11 @@ async function getProduct(slug) {
     return rows[0];
 }
 
+async function getProductByName(name) {
+    const {rows} = await pool.query("SELECT * FROM products WHERE name = $1", [name])
+    return rows[0];
+}
+
 
 async function createProduct(name, description, price, categoryId, image, cloudinary_id) {
     await pool.query("INSERT INTO products (name, category_id, image, description, slug, price, cloudinary_id) VALUES ($1, $2, $3, $4, $5, $6, $7)", [name, categoryId, image, description, name.toLowerCase().split(" ").join("-"), price, cloudinary_id])
@@ -61,6 +66,7 @@ module.exports = {
     getAllCategories,
     getProductsByCategory,
     getProduct,
+    getProductByName,
     getCategory,
     createCategory,
     updateCategory,

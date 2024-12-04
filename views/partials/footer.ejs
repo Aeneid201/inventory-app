@@ -32,6 +32,10 @@
       if (res.status === 'success') {
         errorMsg.classList.add('hidden')
         successMsg.classList.remove('hidden')
+
+      } else if (res.status === 'duplication') {
+        errorMsg.classList.remove('hidden')
+        errorMsg.innerHTML = "This category already exists."
       }
 
     } catch (err) {
@@ -39,7 +43,8 @@
     }
   }
 
-  function resetForm() {
+
+  function resetFields() {
     errorMsg.classList.add('hidden')
     successMsg.classList.add('hidden')
     errorMsg.innerHTML = ""

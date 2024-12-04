@@ -1,7 +1,7 @@
 {
-  "name": "express-boilerplate",
+  "name": "inventory-app",
   "version": "1.0.0",
-  "description": "Express Boilerplate",
+  "description": "Inventory App",
   "main": "server.js",
   "scripts": {
     "start": "node server",

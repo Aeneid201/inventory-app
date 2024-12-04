@@ -56,12 +56,12 @@
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
-    resetForm()
+    resetFields()
     sendData(form, "/updateCategory?_method=PUT")
     form.reset()
 
     setTimeout(() => {
-      location.reload()
+      window.location.href = `/editCategory/${document.querySelector('[name="category"]').value}`
     }, 1000)
   })
 </script>

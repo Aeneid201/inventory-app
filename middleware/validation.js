@@ -4,7 +4,6 @@ module.exports = {
             try{
                 if(!schema) return res.json({status: 'error', message: 'Invalid Schema'})
                 await schema.parse(req.body)
-                res.json({status: 'success'})
                 return next()
     
             }catch(err) {
