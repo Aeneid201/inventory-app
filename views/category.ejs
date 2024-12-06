@@ -7,6 +7,7 @@
       <%= category.name; %>
     </h1>
 
+    <% if(category.name !== 'uncategorized'){ %>
     <div class="flex w-full mb-4">
       <a href="/editCategory/<%= category.name; %>" class="button">Edit Category</a>
 
@@ -17,6 +18,7 @@
       </form>
 
     </div>
+    <% } %>
 
     <div class="grid grid-cols-4 gap-4">
       <% products.map(product => {  %>
@@ -85,6 +87,8 @@
 
       } else if (res.status === 'success') {
         sendToDelete(form, '/deleteCategory?_method=DELETE')
+        alert("The category was deleted")
+        window.location.replace("/categories")
       }
 
     } catch (err) {

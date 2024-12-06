@@ -58,6 +58,7 @@ async function updateCategory(id, name, description, image, cloudinary_id) {
 
 async function deleteCategory(id) {
     await pool.query("DELETE FROM categories WHERE id = $1", [id])
+    await pool.query("UPDATE products SET category_id = (SELECT id FROM categories WHERE name = 'uncategorized') WHERE category_id IS NULL")
 }
 
 module.exports = {

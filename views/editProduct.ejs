@@ -13,7 +13,7 @@
       </div>
 
       <div class="w-2/4">
-        <form enctype="multipart/form-data">
+        <form enctype="multipart/form-data" action="/updateProduct?_method=PUT" method="POST">
           <input type="hidden" name="product" value="<%= product.slug; %>">
 
           <div class="mb-5">
@@ -75,20 +75,5 @@
     </div>
   </div>
 </section>
-
-<script>
-  const form = document.querySelector('form')
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    resetFields()
-    sendData(form, "/updateProduct?_method=PUT")
-    form.reset()
-
-    setTimeout(() => {
-      location.reload()
-    }, 1000)
-  })
-</script>
 
 <%- include('./partials/footer.ejs') %>

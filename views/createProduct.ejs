@@ -12,7 +12,7 @@
         <img src="https://res.cloudinary.com/dstdwoljc/image/upload/v1726533681/sofa_qvdfpb.png" alt="">
       </div>
       <div>
-        <form enctype="multipart/form-data">
+        <form enctype="multipart/form-data" action="/addProduct" method="POST">
           <div class="mb-5">
             <label for="name">
               Name*
@@ -68,17 +68,6 @@
     </div>
   </div>
 </section>
-
-<script>
-  const form = document.querySelector('form')
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    sendData(form, "/addProduct")
-    resetFields()
-    form.reset()
-  })
-</script>
 
 
 <%- include('./partials/footer.ejs') %>

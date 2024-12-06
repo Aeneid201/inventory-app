@@ -70,7 +70,7 @@ module.exports = {
                 const result = await cloudinary.uploader.upload(req.file.path)
                 await db.createCategory(req.body.name, req.body.description, result.secure_url, result.public_id)
             }else {
-                await db.createCategory(req.body.name, req.body.description, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726535753/placeholder_hz8mbp.png', 'placeholder_hz8mbp')
+                await db.createCategory(req.body.name, req.body.description, process.env.PLACEHOLDER_URL, process.env.PLACEHOLDER_ID)
             }
             
             res.json({status: 'success'})
@@ -84,10 +84,16 @@ module.exports = {
             const cat = req.body.category
             const category = await db.getCategory(cat)
 
-            if(!category) return 'Invalid category.'
+            if(!category) return 'Invalid category.';
+            if(cat === 'uncategorized') {
+                console.log('You can\'t update this category')
+                return 'You can\'t update this category';
+            }
 
             if(req?.file?.path) {
-                cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+                if(category.cloudinary_id !== process.env.PLACEHOLDER_ID) {
+                    cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+                }
                 const result = await cloudinary.uploader.upload(req.file.path)
 
                 await db.updateCategory(category.id, req.body.name, req.body.description, result.secure_url, result.public_id)
@@ -116,7 +122,10 @@ module.exports = {
                 return 'You can\'t delete this category';
             }
 
-            cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+            if(category.cloudinary_id !== process.env.PLACEHOLDER_ID) {
+                cloudinary.uploader.destroy(category.cloudinary_id, function(result) { console.log(result) });
+            }
+
             await db.deleteCategory(category.id)
             console.log('Category deleted')
             
@@ -139,7 +148,7 @@ module.exports = {
                 await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, result.secure_url, result.public_id)
 
             }else {
-                await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, 'https://res.cloudinary.com/dstdwoljc/image/upload/v1726535753/placeholder_hz8mbp.png', 'placeholder_hz8mbp')
+                await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, process.env.PLACEHOLDER_URL, process.env.PLACEHOLDER_ID)
             }
             
             console.log('Product added successfully!');
@@ -158,7 +167,10 @@ module.exports = {
 
             if(!product) return 'Invalid product'
             if(req?.file?.path) {
-                cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+                if(product.cloudinary_id !== process.env.PLACEHOLDER_ID) {
+                    cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+                }
+                
                 const result = await cloudinary.uploader.upload(req.file.path)
 
                 await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, req.body.slug, req.body.category, result.secure_url, result.public_id)
@@ -172,6 +184,7 @@ module.exports = {
             }
 
             console.log('Product updated successfully!');
+            res.redirect('back')
             
 
         }catch(err) {
@@ -185,7 +198,9 @@ module.exports = {
             const product = await db.getProduct(productParam)
 
             if(!product) return 'Invalid product!'
-            cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+            if(product.cloudinary_id !== process.env.PLACEHOLDER_ID) {
+                cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
+            }
             await db.deleteProduct(product.id)
 
             console.log('Product deleted successfully!');
