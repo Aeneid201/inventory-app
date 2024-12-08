@@ -12,52 +12,52 @@ module.exports = {
         const cat = req.params.category
         const products = await db.getProductsByCategory(cat)
         const category = await db.getCategory(cat)
-        res.render('category', {products: products, category: category})
+        res.render('category/show', {products: products, category: category})
     },
 
     getProduct: async (req, res) => {
         const slug = req.params.slug
         const product = await db.getProduct(slug)        
-        res.render('product', {product: product})
+        res.render('product/show', {product: product})
     },
 
     getProducts: async (req, res) => {
         const products = await db.getAllProducts()
-        res.render('products', {products: products})
+        res.render('product/index', {products: products})
     },
 
     getCategories: async (req, res) => {
         const categories = await db.getAllCategories()
-        res.render('categories', {categories: categories})
+        res.render('category/index', {categories: categories})
     },
 
     // pages
 
-    createCategoryPage: async(req, res) => {
-        res.render('createCategory')
+    createCategory: async(req, res) => {
+        res.render('category/create')
     },
 
     editCategoryPage: async(req, res) => {
         const cat = req.params.category
         const category = await db.getCategory(cat)
-        res.render('editCategory', {category: category})
+        res.render('category/update', {category: category})
     },
 
-    createProductPage: async(req, res) => {
+    createProduct: async(req, res) => {
         const allCategories = await db.getAllCategories()
-        res.render('createProduct', {categories: allCategories})
+        res.render('product/create', {categories: allCategories})
     },
 
     editProductPage: async(req, res) => {
         const allCategories = await db.getAllCategories()
         const productParam = req.params.product
         const product = await db.getProduct(productParam)
-        res.render('editProduct', {product: product, categories: allCategories})
+        res.render('product/update', {product: product, categories: allCategories})
     },
 
     // END pages
     
-    addCategory: async(req, res) => {
+    storeCategory: async(req, res) => {
         try{
 
             const cat = await db.getCategory(req.body.name)
@@ -103,7 +103,7 @@ module.exports = {
 
             console.log('Category updated successfully.');
             
-            res.redirect(`/editCategory/${req.body.name}`)
+            res.redirect(`/category/update/${req.body.name}`)
 
         }catch(err) {
             console.error(err)
@@ -134,10 +134,11 @@ module.exports = {
         }
     },
 
-    addProduct: async(req, res) => {
+    storeProduct: async(req, res) => {
         try{
 
             const product = await db.getProductByName(req.body.name)
+
             if(product) {
                 console.log('This product already exists')
                 return res.json({status: 'duplication', message: 'Product already exists.'})
@@ -151,8 +152,7 @@ module.exports = {
                 await db.createProduct(req.body.name, req.body.description, req.body.price, req.body.category, process.env.PLACEHOLDER_URL, process.env.PLACEHOLDER_ID)
             }
             
-            console.log('Product added successfully!');
-            res.json({status: 'success'})
+            res.status(201).json({status: "success", message: 'Product created successfully'});
 
         }catch(err) {
             console.error(err)
@@ -178,13 +178,12 @@ module.exports = {
             }else{
                 
                 const slug = req.body.slug ? req.body.slug : (req.body.name).toLowerCase().split(" ").join("-")
-                res.redirect(`/editProduct/${slug}`)
+                res.redirect(`/product/update/${slug}`)
                 await db.updateProduct(product.id, req.body.name, req.body.description, req.body.price, slug, req.body.category, product.image, product.cloudinary_id)
 
             }
 
-            console.log('Product updated successfully!');
-            res.redirect('back')
+            //res.status(201).json({status: "success", message: 'Product updated successfully'});
             
 
         }catch(err) {
@@ -201,10 +200,10 @@ module.exports = {
             if(product.cloudinary_id !== process.env.PLACEHOLDER_ID) {
                 cloudinary.uploader.destroy(product.cloudinary_id, function(result) { console.log(result) });
             }
+
             await db.deleteProduct(product.id)
 
-            console.log('Product deleted successfully!');
-            res.redirect('/products')
+            return res.json({status: "success"})
             
         }catch(err) {
             console.error(err)

@@ -1,4 +1,4 @@
-<%- include('./partials/header.ejs') %>
+<%- include('../partials/header.ejs') %>
 
 
 <section>
@@ -13,7 +13,7 @@
       </div>
 
       <div>
-        <form class="myForm" enctype="multipart/form-data" action="/addCategory" method="POST">
+        <form class="myForm" enctype="multipart/form-data">
           <div class="mb-5">
             <label for="name">Name*</label>
             <input name="name" type="text" placeholder="Chair, wardrobe...">
@@ -30,7 +30,7 @@
             <label for="image">
               Image
             </label>
-            <input type="file" name="image" />
+            <input type="file" name="image" id="fileInput" />
           </div>
 
           <button type="submit">Submit</button>
@@ -45,16 +45,14 @@
   </div>
 </section>
 
-<!-- <script>
-  const form = document.querySelector('.myForm')
+<script>
+  const form = document.querySelector('form')
 
   form.addEventListener('submit', (e) => {
     e.preventDefault()
-    resetFields()
     sendData(form, "/addCategory")
-    form.reset()
   })
-</script> -->
+</script>
 
 
-<%- include('./partials/footer.ejs') %>
+<%- include('../partials/footer.ejs') %>

@@ -1,6 +1,6 @@
 <footer>
   <div class="px-4 py-4 bg-gray-100 dark:bg-gray-700 text-center">
-    <span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">Copyright © 2024 <a href="#">Oumaima Lairani</a>. All Rights Reserved.
+    <span class="text-sm text-gray-500 dark:text-gray-300 sm:text-center">Copyright © 2024 <a href="https://github.com/Aeneid201" target="_blank" rel="noopener">Oumaima Lairani</a>. All Rights Reserved.
     </span>
   </div>
 </footer>
@@ -11,31 +11,33 @@
 
   async function sendData(form, path = "/") {
     const formData = new FormData(form);
-    const data = JSON.stringify(Object.fromEntries(formData));
+    const fileInput = document.getElementById('fileInput');
+    errorMsg.innerHTML = ""
+
+    // for (const [key, value] of formData) {
+    //   console.log(key, value);
+    // }
 
     try {
-      const req = await fetch(path, {
+      const res = await fetch(path, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: data
+        body: formData
       })
 
-      const res = await req.json()
+      const result = await res.json()
 
-      res?.errors?.map(error => {
+      result?.errors?.map(error => {
         errorMsg.classList.remove('hidden')
         errorMsg.innerHTML += error.message + "<br>"
       })
 
-      if (res.status === 'success') {
-        errorMsg.classList.add('hidden')
-        successMsg.classList.remove('hidden')
+      if (result.status === 'success') {
+        resetFields()
+        form.reset()
 
-      } else if (res.status === 'duplication') {
+      } else if (result.status === 'duplication') {
         errorMsg.classList.remove('hidden')
-        errorMsg.innerHTML = "This category already exists."
+        errorMsg.innerHTML = "This item already exists."
       }
 
     } catch (err) {

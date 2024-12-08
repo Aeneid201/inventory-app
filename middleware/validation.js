@@ -7,8 +7,7 @@ module.exports = {
                 return next()
     
             }catch(err) {
-            console.error(err)
-            return res.json({status: 'error', errors: err.errors})
+                return res.json({status: 'error', errors: err.errors})
             }
         }
     }

@@ -9,6 +9,7 @@ const fileFilter = (req, file, cb) => {
     return;
   }
   cb(null, true);
+
 }
 
 const upload = multer({ storage, fileFilter });

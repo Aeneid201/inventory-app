@@ -1,4 +1,4 @@
-<%- include('./partials/header.ejs') %>
+<%- include('../partials/header.ejs') %>
 
 
 <section class="min-h-screen">
@@ -13,14 +13,14 @@
       </div>
 
       <div class="w-2/4">
-        <form enctype="multipart/form-data" action="/updateProduct?_method=PUT" method="POST">
+        <form enctype="multipart/form-data">
           <input type="hidden" name="product" value="<%= product.slug; %>">
 
           <div class="mb-5">
             <label for="name">
               Name*
             </label>
-            <input required value="<%= product.name; %>" name="name" type="text">
+            <input value="<%= product.name; %>" name="name" type="text">
 
           </div>
 
@@ -59,7 +59,7 @@
 
           <div class="mb-5">
             <label for="image">Image</label>
-            <input type="file" name="image" />
+            <input type="file" name="image" id="fileInput" />
           </div>
           <button type="submit">Update Product</button>
 
@@ -76,4 +76,12 @@
   </div>
 </section>
 
-<%- include('./partials/footer.ejs') %>
+<script>
+  const form = document.querySelector('form')
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    sendData(form, "/updateProduct?_method=PUT")
+  })
+</script>
+
+<%- include('../partials/footer.ejs') %>

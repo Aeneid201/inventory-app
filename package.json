@@ -2,7 +2,7 @@
   "name": "inventory-app",
   "version": "1.0.0",
   "description": "Inventory App",
-  "main": "server.js",
+  "main": "server",
   "scripts": {
     "start": "node server",
     "dev": "nodemon server"
